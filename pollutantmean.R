@@ -1,4 +1,4 @@
-pollutantmean <- function(directory=NULL, pollutant=sulfate, id = 1:332) {
+pollutantmean <- function(directory, pollutant, id = 1:332) {
   ## 'directory' is a character vector of length 1 indicating
   ## the location of the CSV files
   
@@ -13,24 +13,23 @@ pollutantmean <- function(directory=NULL, pollutant=sulfate, id = 1:332) {
   ## in the 'id' vector (ignoring NA values)
   ## NOTE: Do not round the result!
   
-    directory <- if (is.numm(directory)) {
-      getwd()
+    file_names = vector(mode = "character", length=length(id))
+    id_name = sprintf("%000",id)
+    pollutantdata = vector(mode = "numeric", length=length(id))
+    for(i in id) {
+      file_names[i] = paste0(directory,"/", id_name[i],".csv")
     }
     
-    file_names = paste0(directory,"/", id,".csv")
+    
+    for(x in 1:length(id)) {
+      p = read.csv(file_names[x])
+      p <- p[[pollutant]]
+      na_data = is.na(p)
+      pollutantdata[x] <- mean(p[!na_data])
       
-    for(file in file_names) {
-      pollutantdata = read.csv(file)
-      if(pollutant==sulfate) {
-          
-        
-      } else { #nitrate
-        
-        
-        
-      }
-      
-      
+      #print(pollutantdata[x])
     }
+    print(pollutantdata)
+    return(mean(pollutantdata)) 
   
   }
