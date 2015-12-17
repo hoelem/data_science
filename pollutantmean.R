@@ -15,23 +15,24 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
   
     file_names = vector(mode = "character", length=length(id))
     id_name = vector(mode = "character", length=length(id))
-    pollutantdata = vector(mode = "numeric", length=length(id))
     i<-1
-    for(i in in 1:length(id) {
+    for(i in 1:length(id)) {
       id_name[i] = formatC(id[i], width ="3",format = "d", flag = "0")
       file_names[i] = paste0(directory,"/", id_name[i],".csv")
     }
     
     x<-1
+    pollutantdata = vector("numeric")
     for(x in 1:length(id)) {
       p = read.csv(file_names[x])
       p <- p[[pollutant]]
       na_data = is.na(p)
-      pollutantdata[x] <- mean(p[!na_data])
-      
-      #print(pollutantdata[x])
+      ps = p[!na_data]
+      pollutantdata <- c(pollutantdata, ps)
     }
-    print(pollutantdata)
+    
+    #print(pollutantdata)
+    
     return(mean(pollutantdata)) 
   
   }
